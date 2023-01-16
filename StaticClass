@@ -1,0 +1,50 @@
+#include<iostream>	
+using namespace std;
+
+class Player {
+	static int num_players;
+	string name;
+	int xp;
+public:
+	// static data member can be accessed via static method
+	static int get_activeplayers(void) {
+		return num_players;
+	}
+	Player(string name_val, int xp);
+	Player(const Player& source);
+	~Player();
+
+};
+
+int Player::num_players{ 0 }; // Initializing the static member
+Player::Player(string name_val, int xp) :name{ name_val }, xp{ xp }
+{
+	++num_players;
+	cout << "Inside the constructor" << endl;
+}
+Player::Player(const Player& source) :Player{ source.name,source.xp }
+{
+	cout << "Inside the Copy constructor" << endl;
+}
+Player::~Player()
+{
+	cout << "inside the destructor " << endl;
+	--num_players;
+}
+
+void display_activemembers (void) {
+	//cout << Player::num_players << endl;
+	cout << "Active players :" << Player::get_activeplayers() << endl;
+}
+int main()
+{
+	display_activemembers();
+	Player Hero{"Hero",10};
+	display_activemembers();
+	{
+		Player enemy{ "Villian", 1000 };
+		display_activemembers();
+	}
+	display_activemembers();
+	return 0;
+}
